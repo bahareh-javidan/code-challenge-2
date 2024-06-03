@@ -3,6 +3,8 @@ package com.apromore.challenge.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Set;
+
 @Setter
 @Getter
 @Builder
@@ -17,4 +19,7 @@ public class Course {
     private Long id;
     private String name;
     private String code;
+    @ManyToMany(mappedBy = "courses", cascade = { CascadeType.PERSIST,
+            CascadeType.MERGE, CascadeType.REMOVE })
+    private Set<Student> students;
 }
