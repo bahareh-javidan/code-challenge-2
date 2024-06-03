@@ -1,0 +1,280 @@
+openapi: 3.1.0
+info:
+  title: Students & Courses API
+  description: API for managing students and their enrollments
+  version: 1.0.0
+paths:
+  /api/students:
+    get:
+      summary: Get all students
+      operationId: getAllStudents
+      tags:
+        - Students
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/StudentResponseDTO'
+    post:
+      summary: Create a new student
+      operationId: createStudent
+      tags:
+        - Students
+      requestBody:
+        description: Student to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudentRequestDTO'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentResponseDTO'
+
+  /api/students/{id}:
+    get:
+      summary: Get a student by ID
+      operationId: getStudentById
+      tags:
+        - Students
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentResponseDTO'
+        '404':
+          description: Student not found
+    put:
+      summary: Update a student
+      operationId: updateStudent
+      tags:
+        - Students
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Student data to update
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudentRequestDTO'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentResponseDTO'
+    delete:
+      summary: Delete a student
+      operationId: deleteStudent
+      tags:
+        - Students
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Student deleted
+        '404':
+          description: Student not found
+  /api/students/{studentId}/courses:
+    get:
+      summary: Get courses of a student
+      operationId: getStudentCourses
+      tags:
+        - Students
+      parameters:
+        - name: studentId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentResponseDTO'
+    post:
+      summary: Enroll a student in courses
+      operationId: enrollStudentInCourse
+      tags:
+        - Students
+      parameters:
+        - name: studentId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Set of course IDs to enroll in
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: integer
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentResponseDTO'
+  /api/courses:
+    get:
+      summary: Get all courses
+      operationId: getAllCourses
+      tags:
+        - Courses
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CourseResponseDTO'
+    post:
+      summary: Create a new course
+      operationId: createCourse
+      tags:
+        - Courses
+      requestBody:
+        description: Course to create
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CourseRequestDTO'
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseResponseDTO'
+  /api/courses/{id}:
+    get:
+      summary: Get a course by ID
+      operationId: getCourseById
+      tags:
+        - Courses
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CourseResponseDTO'
+        '404':
+          description: Course not found
+    delete:
+      summary: Delete a course
+      operationId: deleteCourse
+      tags:
+        - Courses
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Course deleted
+        '404':
+          description: Course not found
+components:
+  schemas:
+    StudentRequestDTO:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the student
+          example: Alphie Atkins
+        age:
+          type: integer
+          description: Age of the student
+          example: 22
+    StudentResponseDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID of the student
+          example: 1
+        name:
+          type: string
+          description: Name of the student
+          example: Alphie Atkins
+        age:
+          type: integer
+          description: Age of the student
+          example: 22
+        courses:
+          type: array
+          items:
+            type: integer
+          description: IDs of the courses the student is enrolled in
+          example: [101, 102, 103]
+    CourseRequestDTO:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the course
+          example: "Introduction to Programming"
+        description:
+          type: string
+          description: Description of the course
+          example: "A beginner course for programming basics"
+    CourseResponseDTO:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID of the course
+          example: 1
+        name:
+          type: string
+          description: Name of the course
+          example: "Introduction to Programming"
+        description:
+          type: string
+          description: Description of the course
+          example: "A beginner course for programming basics"
